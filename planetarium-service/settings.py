@@ -55,7 +55,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "Planetarium.urls"
+ROOT_URLCONF = "planetarium-service.urls"
 
 TEMPLATES = [
     {
