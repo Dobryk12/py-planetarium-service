@@ -1,6 +1,10 @@
+import os
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
 
 
 class PlanetariumDome(models.Model):
@@ -23,11 +27,16 @@ class ShowTheme(models.Model):
         return self.name
 
 
+def astronomy_show_image_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+
+
 class AstronomyShow(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     show_theme = models.ManyToManyField(ShowTheme, blank=True, related_name="astronomy_shows")
-
+    image = models.ImageField(null=True, upload_to=astronomy_show_image_file_path)
     def __str__(self):
         return self.title
 
@@ -37,7 +46,7 @@ class AstronomyShow(models.Model):
 
 class ShowSession(models.Model):
     astronomy_show = models.ForeignKey(
-        "AstronomyShow",
+        AstronomyShow,
         on_delete=models.CASCADE
     )
     planetarium_dome = models.ForeignKey(
