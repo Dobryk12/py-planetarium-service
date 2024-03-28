@@ -53,7 +53,7 @@ class ShowSession(models.Model):
         PlanetariumDome,
         on_delete=models.CASCADE
     )
-    show_time = models.DateTimeField
+    show_time = models.DateTimeField()
 
     def __str__(self):
         return self.astronomy_show.title + " " + str(self.show_time)
