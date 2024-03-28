@@ -174,7 +174,7 @@ class ShowSessionViewSet(
         return super().list(request, *args, **kwargs)
 
 
-class OrderPagination(PageNumberPagination):
+class ReservationPagination(PageNumberPagination):
     page_size = 10
     max_page_size = 100
 
@@ -189,7 +189,7 @@ class ReservationViewSet(
         "tickets__show_session__astronomy_dome",
     )
     serializer_class = ReservationSerializer
-    pagination_class = OrderPagination
+    pagination_class = ReservationPagination
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
