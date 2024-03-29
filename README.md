@@ -26,3 +26,6 @@ python manage.py runserver
 - After loading data from fixture you can use following superuser:
   - Login: `stan@mate.com`
   - Password: `stan123`
+
+
+![API interface](demo.jpg)
