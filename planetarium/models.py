@@ -22,7 +22,7 @@ class PlanetariumDome(models.Model):
 
     class Meta:
         ordering = ["name"]
-        app_label = "planetarium"
+        # app_label = "planetarium"
 
 
 class ShowTheme(models.Model):
@@ -33,7 +33,6 @@ class ShowTheme(models.Model):
 
     class Meta:
         ordering = ["name"]
-        app_label = "planetarium"
 
 
 def astronomy_show_image_file_path(instance, filename):
@@ -52,7 +51,7 @@ class AstronomyShow(models.Model):
 
     class Meta:
         ordering = ["title"]
-        app_label = "planetarium"
+        # app_label = "planetarium"
 
 
 class ShowSession(models.Model):
@@ -71,7 +70,7 @@ class ShowSession(models.Model):
 
     class Meta:
         ordering = ["-show_time"]
-        app_label = "planetarium"
+        # app_label = "planetarium"
 
 
 class Reservation(models.Model):
@@ -84,7 +83,7 @@ class Reservation(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
-        app_label = "planetarium"
+        # app_label = "planetarium"
 
 
 class Ticket(models.Model):
