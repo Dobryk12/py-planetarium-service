@@ -1,0 +1,213 @@
+[
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 1,
+    "fields": {
+      "name": "First Dome",
+      "rows": 25,
+      "seats_in_row": 30
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 2,
+    "fields": {
+      "name": "Second Dome",
+      "rows": 24,
+      "seats_in_row": 18
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 3,
+    "fields": {
+      "name": "Third Dome",
+      "rows": 30,
+      "seats_in_row": 20
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 4,
+    "fields": {
+      "name": "Fourth Dome",
+      "rows": 14,
+      "seats_in_row": 8
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 1,
+    "fields": {
+      "name": "Cosmic Wonders"
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 2,
+    "fields": {
+      "name": "Galactic Exploration"
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 3,
+    "fields": {
+      "name": "Stellar Phenomena"
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 4,
+    "fields": {
+      "name": "Astronomical Marvels"
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 1,
+    "fields": {
+      "title": "The Cosmos Unveiled",
+      "description": "A breathtaking journey through the wonders of the universe.",
+      "image": null,
+      "show_theme": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 2,
+    "fields": {
+      "title": "Voyage to the Stars",
+      "description": "An epic exploration of distant galaxies and cosmic phenomena.",
+      "image": null,
+      "show_theme": [
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 3,
+    "fields": {
+      "title": "Mysteries of the Black Hole",
+      "description": "A fascinating dive into the enigmatic realm of black holes.",
+      "image": null,
+      "show_theme": [
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 1,
+    "fields": {
+      "astronomy_show": 1,
+      "planetarium_dome": 1,
+      "show_time": "2024-10-08T13:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 2,
+    "fields": {
+      "astronomy_show": 2,
+      "planetarium_dome": 2,
+      "show_time": "2024-10-09T13:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 3,
+    "fields": {
+      "astronomy_show": 3,
+      "planetarium_dome": 3,
+      "show_time": "2024-10-10T13:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 4,
+    "fields": {
+      "astronomy_show": 3,
+      "planetarium_dome": 4,
+      "show_time": "2024-10-11T13:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 1,
+    "fields": {
+      "created_at": "2022-08-09T09:06:18.876Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 2,
+    "fields": {
+      "created_at": "2022-08-09T09:06:18.876Z",
+      "user": 2
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 3,
+    "fields": {
+      "created_at": "2022-08-09T09:06:18.876Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 4,
+    "fields": {
+      "created_at": "2022-08-09T09:06:18.876Z",
+      "user": 2
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 1,
+    "fields": {
+      "row": 1,
+      "seat": 1,
+      "show_session": 1,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 2,
+    "fields": {
+      "row": 2,
+      "seat": 4,
+      "show_session": 1,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 3,
+    "fields": {
+      "row": 3,
+      "seat": 3,
+      "show_session": 2,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 4,
+    "fields": {
+      "row": 4,
+      "seat": 3,
+      "show_session": 2,
+      "reservation": 1
+    }
+  }
+]

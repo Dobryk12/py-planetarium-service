@@ -1,6 +1,7 @@
 import os
 import uuid
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -19,12 +20,20 @@ class PlanetariumDome(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["name"]
+        app_label = "planetarium"
+
 
 class ShowTheme(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["name"]
+        app_label = "planetarium"
 
 
 def astronomy_show_image_file_path(instance, filename):
@@ -37,11 +46,13 @@ class AstronomyShow(models.Model):
     description = models.TextField()
     show_theme = models.ManyToManyField(ShowTheme, blank=True, related_name="astronomy_shows")
     image = models.ImageField(null=True, upload_to=astronomy_show_image_file_path)
+
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ["title"]
+        app_label = "planetarium"
 
 
 class ShowSession(models.Model):
@@ -60,17 +71,20 @@ class ShowSession(models.Model):
 
     class Meta:
         ordering = ["-show_time"]
+        app_label = "planetarium"
 
 
 class Reservation(models.Model):
     created_at = models.DateTimeField()
-    user = get_user_model()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return str({self.created_at})
 
     class Meta:
         ordering = ["-created_at"]
+        app_label = "planetarium"
 
 
 class Ticket(models.Model):
@@ -78,11 +92,13 @@ class Ticket(models.Model):
     seat = models.IntegerField()
     show_session = models.ForeignKey(
         ShowSession,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="tickets"
     )
     reservation = models.ForeignKey(
         Reservation,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="tickets"
     )
 
     @staticmethod
@@ -122,4 +138,3 @@ class Ticket(models.Model):
         return (
             f"{str(self.show_session)} (row: {self.row}, seat: {self.seat})"
         )
-

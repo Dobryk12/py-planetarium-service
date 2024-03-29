@@ -15,24 +15,24 @@ from .models import (
 class PlanetariumDomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanetariumDome
-        fields = ["id", "name", "seats_in_row", "rows", "capacity"]
+        fields = ("id", "name", "seats_in_row", "rows", "capacity")
 
 
 class ShowSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShowSession
-        fields = [
+        fields = (
             "id",
             "show_time",
             "astronomy_show",
             "planetarium_dome",
-        ]
+        )
 
 
 class ShowThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShowTheme
-        fields = ["id", "name"]
+        fields = ("id", "name")
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -48,12 +48,13 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = [
+        fields = (
             "id",
             "row",
             "seat",
             "show_session",
-        ]
+            "reservation"
+        )
 
 
 class ReservationSerializer(serializers.ModelSerializer):
@@ -61,11 +62,11 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reservation
-        fields = [
+        fields = (
             "id",
             "tickets",
             "created_at",
-        ]
+        )
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -83,12 +84,12 @@ class ReservationListSerializer(ReservationSerializer):
 class AstronomyShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = AstronomyShow
-        fields = [
+        fields = (
             "id",
             "title",
             "description",
             "show_theme",
-        ]
+        )
 
 
 class AstronomyShowListSerializer(AstronomyShowSerializer):
@@ -98,39 +99,39 @@ class AstronomyShowListSerializer(AstronomyShowSerializer):
 
     class Meta:
         model = AstronomyShow
-        fields = [
+        fields = (
             "id",
             "title",
             "description",
             "show_theme",
             "image"
-        ]
+        )
 
 
 class AstronomyShowDetailsSerializer(AstronomyShowSerializer):
     show_theme = serializers.SlugRelatedField(
-        many=False, read_only=True,
+        many=False, read_only=True, slug_field="name"
     )
 
     class Meta:
         model = AstronomyShow
-        fields = [
+        fields = (
             "id",
             "title",
             "description",
             "show_theme",
             "image"
-        ]
+        )
 
 
-class AstronomyShowImageSerializer(AstronomyShowSerializer):
+class AstronomyShowImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AstronomyShow
-        fields = [
+        fields = (
             "id",
             "image"
-        ]
+        )
 
 
 class ShowSessionListSerializer(ShowSessionSerializer):
@@ -154,28 +155,29 @@ class ShowSessionListSerializer(ShowSessionSerializer):
 
     class Meta:
         model = ShowSession
-        fields = [
+        fields = (
             "id",
             "astronomy_show",
             "astronomy_show_image",
             "planetarium_dome_name",
             "planetarium_dome_capacity",
             "tickets_available",
-            ]
+        )
 
 
 class TicketListSerializer(TicketSerializer):
     show_session = ShowSessionListSerializer(many=False, read_only=True)
+    reservation = ReservationSerializer(many=False, read_only=True)
 
 
 class TicketSeatsSerializer(TicketSerializer):
 
     class Meta:
         model = Ticket
-        fields = [
+        fields = (
             "row",
             "seat",
-        ]
+        )
 
 
 class ShowSessionDetailSerializer(ShowSessionSerializer):
@@ -187,11 +189,10 @@ class ShowSessionDetailSerializer(ShowSessionSerializer):
 
     class Meta:
         model = ShowSession
-        fields = [
+        fields = (
             "id",
             "show_time",
             "astronomy_show",
             "planetarium_dome",
             "taken_places",
-        ]
-
+        )

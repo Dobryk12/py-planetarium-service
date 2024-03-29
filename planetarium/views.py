@@ -50,8 +50,8 @@ class AstronomyShowViewSet(
         return [int(str_id) for str_id in qs.split(",")]
 
     def get_queryset(self):
-        title = self.queryset.query_params.get('title')
-        show_themes = self.queryset.query_params.get('show_themes')
+        title = self.request.query_params.get('title')
+        show_themes = self.request.query_params.get('show_themes')
 
         queryset = self.queryset
 
@@ -81,7 +81,7 @@ class AstronomyShowViewSet(
         url_path="upload_image",
         permission_classes=[IsAdminUser],
     )
-    def upload_image(self, request, pk=None):
+    def upload_image(self, request, opk=None):
 
         astronomy_show = self.get_object()
         serializer = self.get_serializer(astronomy_show, data=request.data)
@@ -120,7 +120,7 @@ class ShowSessionViewSet(
         .select_related("astronomy_show", "planetarium_dome")
         .annotate(
             tickets_available=(
-                    F("planetarium_dome__rows") * "planetarium_dome__seats_in__row"
+                    F("planetarium_dome__rows") * F("planetarium_dome__seats_in_row")
                     - Count("tickets")
             )
         )
