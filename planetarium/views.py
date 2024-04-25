@@ -3,15 +3,34 @@ from datetime import datetime
 from django.db.models import F, Count
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
-from rest_framework import viewsets, mixins, status
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from planetarium.models import (
+    PlanetariumDome,
+    ShowTheme,
+    AstronomyShow,
+    ShowSession,
+    Reservation
+)
 from planetarium.permissions import IsAdminOrIfAuthenticatedReadOnly
-from planetarium.serializers import *
+from planetarium.serializers import (
+    PlanetariumDomeSerializer,
+    ShowThemeSerializer,
+    ShowSessionSerializer,
+    AstronomyShowSerializer,
+    ReservationSerializer,
+    AstronomyShowListSerializer,
+    AstronomyShowDetailsSerializer,
+    AstronomyShowImageSerializer,
+    ShowSessionListSerializer,
+    ShowSessionDetailSerializer,
+    ReservationListSerializer,
+)
 
 
 class PlanetariumDomeViewSet(
@@ -73,7 +92,7 @@ class AstronomyShowViewSet(
         if self.action == "upload_image":
             return AstronomyShowImageSerializer
 
-        return AstronomyShowSerializer
+        return self.serializer_class
 
     @action(
         methods=["POST"],
@@ -82,7 +101,6 @@ class AstronomyShowViewSet(
         permission_classes=[IsAdminUser],
     )
     def upload_image(self, request, opk=None):
-
         astronomy_show = self.get_object()
         serializer = self.get_serializer(astronomy_show, data=request.data)
 
@@ -116,7 +134,7 @@ class ShowSessionViewSet(
     mixins.RetrieveModelMixin,
 ):
     queryset = (
-        ShowSession.objects.all()
+        ShowSession.objects
         .select_related("astronomy_show", "planetarium_dome")
         .annotate(
             tickets_available=(
@@ -151,7 +169,7 @@ class ShowSessionViewSet(
         if self.action == "retrieve":
             return ShowSessionDetailSerializer
 
-        return ShowSessionSerializer
+        return self.serializer_class
 
     @extend_schema(
         parameters=[
@@ -199,7 +217,7 @@ class ReservationViewSet(
         if self.action == "list":
             return ReservationListSerializer
 
-        return ReservationSerializer
+        return self.serializer_class
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

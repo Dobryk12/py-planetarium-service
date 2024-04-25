@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-1evle3cppfisaxe!$2+o*4e*xh@c73v+it_4-pd(+slg1zhqvk"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "drf_spectacular",
     "planetarium",
-    "user"
+    "user",
+    "rest_framework"
 ]
 
 AUTH_USER_MODEL = "user.User"
@@ -143,7 +144,7 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ],
-    "DEFAULT_THROTTLE_RATES": {"anon": "1000000/day", "user": "10000000/day"},
+    "DEFAULT_THROTTLE_RATES": {"anon": "100/day", "user": "1000/day"},
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
