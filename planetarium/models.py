@@ -2,13 +2,14 @@ import os
 import uuid
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.text import slugify
 
 
 class PlanetariumDome(models.Model):
+
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
@@ -22,7 +23,6 @@ class PlanetariumDome(models.Model):
 
     class Meta:
         ordering = ["name"]
-        # app_label = "planetarium"
 
 
 class ShowTheme(models.Model):
@@ -41,6 +41,7 @@ def astronomy_show_image_file_path(instance, filename):
 
 
 class AstronomyShow(models.Model):
+
     title = models.CharField(max_length=255)
     description = models.TextField()
     show_theme = models.ManyToManyField(ShowTheme, blank=True, related_name="astronomy_shows")
@@ -51,42 +52,47 @@ class AstronomyShow(models.Model):
 
     class Meta:
         ordering = ["title"]
-        # app_label = "planetarium"
 
 
 class ShowSession(models.Model):
+
     astronomy_show = models.ForeignKey(
         AstronomyShow,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="show_sessions"
     )
     planetarium_dome = models.ForeignKey(
         PlanetariumDome,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="show_sessions"
     )
     show_time = models.DateTimeField()
 
     def __str__(self):
-        return self.astronomy_show.title + " " + str(self.show_time)
+        return f"{self.astronomy_show.title} {str(self.show_time)}"
 
     class Meta:
         ordering = ["-show_time"]
-        # app_label = "planetarium"
 
 
 class Reservation(models.Model):
+
     created_at = models.DateTimeField()
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reservations"
+    )
 
     def __str__(self):
         return str({self.created_at})
 
     class Meta:
         ordering = ["-created_at"]
-        # app_label = "planetarium"
 
 
 class Ticket(models.Model):
+
     row = models.IntegerField()
     seat = models.IntegerField()
     show_session = models.ForeignKey(
@@ -102,9 +108,9 @@ class Ticket(models.Model):
 
     @staticmethod
     def validate_ticket(row, seat, planetarium_dome, error_message):
-        for ticket_attr_value, ticket_attr_name,planetarium_dome_name in [
-        (row, "row", "rows"),
-        (seat, "seat", "seats"),
+        for ticket_attr_value, ticket_attr_name, planetarium_dome_name in [
+            (row, "row", "rows"),
+            (seat, "seat", "seats"),
 
         ]:
             count_attrs = getattr(planetarium_dome, planetarium_dome_name)
@@ -137,3 +143,11 @@ class Ticket(models.Model):
         return (
             f"{str(self.show_session)} (row: {self.row}, seat: {self.seat})"
         )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['row', 'seat', 'reservation'],
+                name='unique_ticket'
+            )
+        ]
