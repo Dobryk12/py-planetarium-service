@@ -40,7 +40,7 @@ class PlanetariumDomeViewSet(
 ):
     queryset = PlanetariumDome.objects.all()
     serializer_class = PlanetariumDomeSerializer
-    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
+    permission_classes = []
 
 
 class ShowThemeViewSet(
@@ -50,7 +50,7 @@ class ShowThemeViewSet(
 ):
     queryset = ShowTheme.objects.all()
     serializer_class = ShowThemeSerializer
-    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
+    permission_classes = []
 
 
 class AstronomyShowViewSet(
@@ -61,7 +61,7 @@ class AstronomyShowViewSet(
 ):
     queryset = AstronomyShow.objects.prefetch_related("show_theme")
     serializer_class = AstronomyShowSerializer
-    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
+    permission_classes = []
 
     @staticmethod
     def _params_to_ints(qs):
@@ -100,11 +100,11 @@ class AstronomyShowViewSet(
         url_path="upload_image",
         permission_classes=[IsAdminUser],
     )
-    def upload_image(self, request, opk=None):
+    def upload_image(self, request):
         astronomy_show = self.get_object()
         serializer = self.get_serializer(astronomy_show, data=request.data)
-
         if serializer.is_valid():
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
@@ -145,7 +145,7 @@ class ShowSessionViewSet(
     )
 
     serializer_class = ShowSessionSerializer
-    permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
+    permission_classes = []
 
     def get_queryset(self):
         date = self.request.query_params.get("date")
